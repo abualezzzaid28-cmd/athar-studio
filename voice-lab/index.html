@@ -60,16 +60,17 @@
     stop.disabled = true;
     progress.hidden = false;
     progress.value = 0;
-    status.textContent = "بدأ التشغيل. جارٍ تحميل مكتبة الصوت...";
+    status.textContent = "بدأ التشغيل. جارٍ تحميل محرك الصوت المحلي...";
     try {
       // تحميل المكتبة عند الضغط فقط حتى تبقى الواجهة مستجيبة إذا تعذر الاتصال بالمكتبة.
-      const { NabraTTS } = await import("https://cdn.jsdelivr.net/npm/nabra-tts@0/+esm");
+      const { NabraTTS } = await import("./vendor/nabra/index.js");
 
       if (!engine) {
-        status.textContent = "تم تحميل المكتبة. جارٍ تحميل نموذج الصوت (قد يستغرق ذلك أول مرة)...";
+        status.textContent = "تم تحميل المحرك المحلي. جارٍ تحميل نموذج الصوت (قد يستغرق ذلك أول مرة)...";
         engine = await NabraTTS.load({
           dtype: "fp16",
           device: "auto",
+          wasmPaths: "./vendor/ort/",
           onProgress: ({ loaded, total, file } = {}) => {
             if (total > 0) {
               progress.value = Math.min(1, loaded / total);

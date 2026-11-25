@@ -26,12 +26,12 @@ jobs:
       - name: Download Nabra source
         run: git clone --depth 1 https://github.com/Oddadmix/nabra-tts.git /tmp/nabra-tts
 
-      - name: Install a non-SIMD-compatible ONNX Runtime
+      - name: Install and verify non-SIMD ONNX Runtime
         working-directory: /tmp/nabra-tts
         run: |
           npm ci
-          npm pkg set 'dependencies.onnxruntime-web=1.18.0'
-          npm install --package-lock=false --ignore-scripts
+          npm install --save-exact --package-lock=false --ignore-scripts onnxruntime-web@1.18.0
+          node -e "const p=require('./node_modules/onnxruntime-web/package.json'); console.log('Installed ONNX Runtime:', p.version); if(p.version !== '1.18.0') process.exit(1)"
 
       - name: Build browser bundle with ONNX Runtime included
         working-directory: /tmp/nabra-tts
@@ -41,19 +41,20 @@ jobs:
           p = Path("tsup.config.ts")
           s = p.read_text()
           old = "external: ['react', 'onnxruntime-web']"
-          new = "external: ['react'],\n  noExternal: ['onnxruntime-web']"
+          new = "external: ['react'],\\n  noExternal: ['onnxruntime-web']"
           if old not in s:
               raise SystemExit("Could not find expected external dependency declaration")
           p.write_text(s.replace(old, new, 1))
           PY
           npm run build
+          grep -R -q '1.18.0' dist || (echo "Built bundle does not contain ONNX Runtime 1.18.0"; exit 1)
 
-      - name: Copy compatible engine and WASM files
+      - name: Copy only the non-SIMD runtime and engine
         run: |
           mkdir -p voice-lab/vendor/nabra voice-lab/vendor/ort
           cp -R /tmp/nabra-tts/dist/. voice-lab/vendor/nabra/
           rm -f voice-lab/vendor/ort/*.wasm
-          cp /tmp/nabra-tts/node_modules/onnxruntime-web/dist/*.wasm voice-lab/vendor/ort/
+          cp /tmp/nabra-tts/node_modules/onnxruntime-web/dist/ort-wasm.wasm voice-lab/vendor/ort/
           test -s voice-lab/vendor/ort/ort-wasm.wasm
           cp /tmp/nabra-tts/LICENSE voice-lab/vendor/nabra/LICENSE
           cp /tmp/nabra-tts/THIRD_PARTY_NOTICES.md voice-lab/vendor/nabra/THIRD_PARTY_NOTICES.md
@@ -68,6 +69,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No generated engine changes."
           else
-            git commit -m "Use non-SIMD ONNX runtime for voice lab"
+            git commit -m "Pin non-SIMD ONNX runtime for voice lab"
             git push
           fi

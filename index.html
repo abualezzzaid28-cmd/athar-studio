@@ -273,6 +273,13 @@
     .toast { position: fixed; z-index: 10; right: 50%; bottom: 24px; max-width: calc(100% - 32px); padding: 11px 16px; transform: translate(50%, 20px); border-radius: 10px; background: #24352e; color: white; font-size: 12px; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; }
     .toast.show { transform: translate(50%, 0); opacity: 1; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%); }
+    .storyboard-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 13px; }
+    .storyboard-actions button { min-height: 38px; }
+    .storyboard-output { display: grid; gap: 9px; }
+    .storyboard-empty { margin: 0; padding: 14px; border: 1px dashed #d8e1d8; border-radius: 11px; color: var(--muted); font-size: 11px; text-align: center; }
+    .scene-item { padding: 12px 14px; border: 1px solid var(--line); border-radius: 11px; background: #fbfcfa; }
+    .scene-item strong { display: block; margin-bottom: 4px; color: var(--green); font-size: 11px; }
+    .scene-item p { margin: 0; color: #4f5b53; font-size: 12px; line-height: 1.8; }
 
     @media (max-width: 850px) {
       main { width: min(700px, 92%); padding-top: 28px; }
@@ -449,6 +456,29 @@
                 <small>اجعل رسالتك بسيطة، إيجابية، وقريبة من جمهورك.</small>
                 <button type="button" class="suggestion-button" id="insert-suggestion">إضافة نص مقترح</button>
               </div>
+            </div>
+          </section>
+
+          <section class="card" aria-labelledby="storyboard-heading">
+            <div class="card-header">
+              <div class="title-wrap">
+                <span class="section-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="8" height="8" rx="1"/><rect x="13" y="4" width="8" height="8" rx="1"/><path d="M3 16h18M7 20h10"/></svg>
+                </span>
+                <div><h2 id="storyboard-heading">خطة المشاهد</h2><p class="card-subtitle">حوّل النص إلى لقطات مرتبة محلياً على جهازك</p></div>
+              </div>
+              <span class="optional">مجاني · دون اتصال خارجي</span>
+            </div>
+            <div class="card-body">
+              <p class="card-subtitle" style="margin:0 0 12px">قسّم رسالتك إلى مشاهد قصيرة لتسهيل التصوير والمونتاج.</p>
+              <div class="storyboard-actions">
+                <button type="button" class="review-button" id="make-storyboard">إنشاء خطة المشاهد</button>
+                <button type="button" class="secondary-button" id="download-storyboard" disabled>حفظ الخطة TXT</button>
+              </div>
+              <div id="storyboard-output" class="storyboard-output" aria-live="polite">
+                <p class="storyboard-empty">اكتب النص التوعوي أولاً، ثم اضغط «إنشاء خطة المشاهد».</p>
+              </div>
+              <p class="audio-note">هذه خطة نصية مساعدة فقط؛ لا تنشئ صوراً أو فيديو تلقائياً.</p>
             </div>
           </section>
         </div>
@@ -757,6 +787,61 @@
       reviewStatus.classList.add("visible");
       updateProgress();
       showToast("تم تسجيل الاعتماد لهذه الجلسة.");
+    });
+
+    let storyboardText = "";
+
+    document.getElementById("make-storyboard").addEventListener("click", () => {
+      const rawText = scriptText.value.trim();
+      const output = document.getElementById("storyboard-output");
+      const downloadButton = document.getElementById("download-storyboard");
+      if (!rawText) {
+        showToast("اكتب النص التوعوي أولاً لإنشاء خطة المشاهد.");
+        scriptText.focus();
+        return;
+      }
+      let parts = rawText.split(/(?<=[.!؟?؛])\\s+|\\n+/).map((part) => part.trim()).filter(Boolean);
+      if (parts.length < 2) {
+        const words = rawText.split(/\\s+/);
+        const chunkSize = Math.max(1, Math.ceil(words.length / 3));
+        parts = [];
+        for (let i = 0; i < words.length; i += chunkSize) parts.push(words.slice(i, i + chunkSize).join(" "));
+      }
+      if (parts.length > 5) {
+        const grouped = [];
+        const groupSize = Math.ceil(parts.length / 5);
+        for (let i = 0; i < parts.length; i += groupSize) grouped.push(parts.slice(i, i + groupSize).join(" "));
+        parts = grouped;
+      }
+      const sceneNames = ["المشهد الأول — افتتاحية", "المشهد الثاني — الفكرة", "المشهد الثالث — التوضيح", "المشهد الرابع — الرسالة", "المشهد الخامس — الخاتمة"];
+      output.replaceChildren();
+      storyboardText = "أثر STUDIO — خطة المشاهد\\n\\n" + parts.map((part, index) => sceneNames[index] + "\\n" + part).join("\\n\\n");
+      parts.forEach((part, index) => {
+        const item = document.createElement("article");
+        item.className = "scene-item";
+        const heading = document.createElement("strong");
+        heading.textContent = sceneNames[index] || "المشهد " + (index + 1);
+        const paragraph = document.createElement("p");
+        paragraph.textContent = part;
+        item.append(heading, paragraph);
+        output.append(item);
+      });
+      downloadButton.disabled = false;
+      showToast("تم إعداد خطة المشاهد على جهازك.");
+    });
+
+    document.getElementById("download-storyboard").addEventListener("click", () => {
+      if (!storyboardText) return;
+      const blob = new Blob(["\\uFEFF" + storyboardText], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "athar-studio-storyboard.txt";
+      document.body.append(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      showToast("تم تجهيز ملف خطة المشاهد.");
     });
 
     restoreDraft();

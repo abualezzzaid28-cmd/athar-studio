@@ -2,6 +2,9 @@ name: Build local Nabra voice engine
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/build-nabra.yml"
 
 permissions:
   contents: write
@@ -23,10 +26,16 @@ jobs:
       - name: Download Nabra source
         run: git clone --depth 1 https://github.com/Oddadmix/nabra-tts.git /tmp/nabra-tts
 
-      - name: Build browser bundle with ONNX Runtime included
+      - name: Install a non-SIMD-compatible ONNX Runtime
         working-directory: /tmp/nabra-tts
         run: |
           npm ci
+          npm pkg set 'dependencies.onnxruntime-web=1.18.0'
+          npm install --package-lock=false --ignore-scripts
+
+      - name: Build browser bundle with ONNX Runtime included
+        working-directory: /tmp/nabra-tts
+        run: |
           python3 - <<'PY'
           from pathlib import Path
           p = Path("tsup.config.ts")
@@ -39,13 +48,17 @@ jobs:
           PY
           npm run build
 
-      - name: Copy built engine and local WASM runtime
+      - name: Copy compatible engine and WASM files
         run: |
           mkdir -p voice-lab/vendor/nabra voice-lab/vendor/ort
           cp -R /tmp/nabra-tts/dist/. voice-lab/vendor/nabra/
+          rm -f voice-lab/vendor/ort/*.wasm
           cp /tmp/nabra-tts/node_modules/onnxruntime-web/dist/*.wasm voice-lab/vendor/ort/
+          test -s voice-lab/vendor/ort/ort-wasm.wasm
           cp /tmp/nabra-tts/LICENSE voice-lab/vendor/nabra/LICENSE
           cp /tmp/nabra-tts/THIRD_PARTY_NOTICES.md voice-lab/vendor/nabra/THIRD_PARTY_NOTICES.md
+          echo "Available WASM files:"
+          ls -lh voice-lab/vendor/ort/
 
       - name: Commit generated local engine
         run: |
@@ -55,6 +68,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No generated engine changes."
           else
-            git commit -m "Build local Nabra browser engine"
+            git commit -m "Use non-SIMD ONNX runtime for voice lab"
             git push
           fi

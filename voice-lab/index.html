@@ -71,6 +71,7 @@
           dtype: "fp16",
           device: "auto",
           wasmPaths: "./vendor/ort/",
+          worker: false,
           onProgress: ({ loaded, total, file } = {}) => {
             if (total > 0) {
               progress.value = Math.min(1, loaded / total);

@@ -32,7 +32,7 @@ jobs:
           p = Path("tsup.config.ts")
           s = p.read_text()
           old = "external: ['react', 'onnxruntime-web']"
-          new = "external: ['react']\n  noExternal: ['onnxruntime-web']"
+          new = "external: ['react'],\n  noExternal: ['onnxruntime-web']"
           if old not in s:
               raise SystemExit("Could not find expected external dependency declaration")
           p.write_text(s.replace(old, new, 1))

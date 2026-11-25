@@ -1,7 +1,8 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
 
-var _chunkJ6ABQ42Zcjs = require('./chunk-J6ABQ42Z.cjs');
+var _chunkWVYIII3Acjs = require('./chunk-WVYIII3A.cjs');
 require('./chunk-H77ZGL5I.cjs');
+require('./chunk-OBGZSXTJ.cjs');
 
 // src/react.ts
 var _react = require('react');
@@ -17,7 +18,7 @@ function useNabraTTS(options = {}) {
     let instance = null;
     const files = {};
     setStatus("loading");
-    _chunkJ6ABQ42Zcjs.NabraTTS.load({
+    _chunkWVYIII3Acjs.NabraTTS.load({
       ...optionsRef.current,
       diacritize: optionsRef.current.diacritize && ((t) => optionsRef.current.diacritize(t)),
       onProgress: (p) => {
@@ -65,4 +66,4 @@ function useNabraTTS(options = {}) {
 
 
 
-exports.NabraTTS = _chunkJ6ABQ42Zcjs.NabraTTS; exports.useNabraTTS = useNabraTTS;
+exports.NabraTTS = _chunkWVYIII3Acjs.NabraTTS; exports.useNabraTTS = useNabraTTS;

@@ -1,8 +1,7 @@
 import {
   NabraTTS
-} from "./chunk-MBXPB63T.js";
+} from "./chunk-SR5SRRPY.js";
 import "./chunk-X5KXFIX3.js";
-import "./chunk-3RG5ZIWI.js";
 
 // src/react.ts
 import { useCallback, useEffect, useRef, useState } from "react";

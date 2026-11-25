@@ -3,14 +3,13 @@
 
 
 
-var _chunkWVYIII3Acjs = require('./chunk-WVYIII3A.cjs');
+var _chunkQFUEIJBEcjs = require('./chunk-QFUEIJBE.cjs');
 
 
 
 
 var _chunkQPICMBNJcjs = require('./chunk-QPICMBNJ.cjs');
 require('./chunk-H77ZGL5I.cjs');
-require('./chunk-OBGZSXTJ.cjs');
 
 
 
@@ -19,4 +18,4 @@ require('./chunk-OBGZSXTJ.cjs');
 
 
 
-exports.NabraTTS = _chunkWVYIII3Acjs.NabraTTS; exports.clearCache = _chunkQPICMBNJcjs.clearCache; exports.encodeWav = _chunkWVYIII3Acjs.encodeWav; exports.isDiacritized = _chunkQPICMBNJcjs.isDiacritized; exports.normalizeText = _chunkQPICMBNJcjs.normalizeText; exports.playAudio = _chunkWVYIII3Acjs.playAudio; exports.toWavBlob = _chunkWVYIII3Acjs.toWavBlob;
+exports.NabraTTS = _chunkQFUEIJBEcjs.NabraTTS; exports.clearCache = _chunkQPICMBNJcjs.clearCache; exports.encodeWav = _chunkQFUEIJBEcjs.encodeWav; exports.isDiacritized = _chunkQPICMBNJcjs.isDiacritized; exports.normalizeText = _chunkQPICMBNJcjs.normalizeText; exports.playAudio = _chunkQFUEIJBEcjs.playAudio; exports.toWavBlob = _chunkQFUEIJBEcjs.toWavBlob;

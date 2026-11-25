@@ -1,10 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-labelledby="title desc">
-<title id="title">أثر STUDIO</title><desc id="desc">شعار استوديو أثر بالذهبي والكحلي والفيروزي.</desc>
-<defs><linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0a6"/><stop offset=".45" stop-color="#e8ae35"/><stop offset="1" stop-color="#a96b12"/></linearGradient><linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#123b65"/><stop offset="1" stop-color="#071a32"/></linearGradient><linearGradient id="teal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#22c7c5"/><stop offset="1" stop-color="#087b9b"/></linearGradient></defs>
-<path d="M110 315C28 275 45 145 153 99c99-42 181 5 258 54 63 40 117 43 151 11" fill="none" stroke="url(#teal)" stroke-width="20" stroke-linecap="round"/>
-<path d="M164 91h316a30 30 0 0 1 30 30v122H134V121a30 30 0 0 1 30-30Z" fill="url(#blue)" stroke="#20b8c2" stroke-width="5"/>
-<text x="320" y="238" text-anchor="middle" font-family="Tahoma,Arial,sans-serif" font-size="112" font-weight="800" fill="url(#gold)" stroke="#081d35" stroke-width="3" paint-order="stroke">أثر</text>
-<rect x="170" y="263" width="300" height="70" rx="20" fill="url(#blue)" stroke="url(#gold)" stroke-width="4"/>
-<text x="320" y="310" text-anchor="middle" font-family="Arial,sans-serif" font-size="42" font-weight="700" letter-spacing="7" fill="#fff">STUDIO</text>
-<path d="M320 350c-65 0-110 20-145 38M320 350c65 0 110 20 145 38" fill="none" stroke="url(#teal)" stroke-width="6" stroke-linecap="round"/>
-<circle cx="320" cy="355" r="8" fill="url(#gold)"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 240" role="img" aria-labelledby="title desc">
+<title id="title">أثر STUDIO</title>
+<desc id="desc">هوية أثر ستوديو: رمز موجة أثر ونقطة ضوء بخطوط نظيفة باللون الكحلي والذهبي والتركوازي.</desc>
+<defs>
+  <linearGradient id="navy" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#173b57"/><stop offset="1" stop-color="#091d32"/></linearGradient>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f1d69a"/><stop offset="1" stop-color="#bd8b3c"/></linearGradient>
+  <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#43b8b1"/><stop offset="1" stop-color="#167d83"/></linearGradient>
+</defs>
+<g transform="translate(22 10)">
+  <circle cx="110" cy="110" r="98" fill="#f7f8f6" stroke="#e5e9e7" stroke-width="2"/>
+  <path d="M47 145c22-49 57-76 102-82 17-2 33 0 48 6" fill="none" stroke="url(#navy)" stroke-width="17" stroke-linecap="round"/>
+  <path d="M45 169c33-28 68-41 104-39 22 1 42 8 61 21" fill="none" stroke="url(#teal)" stroke-width="12" stroke-linecap="round"/>
+  <path d="M77 108c18-18 39-28 63-29 16 0 30 4 44 13" fill="none" stroke="url(#gold)" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="188" cy="48" r="10" fill="url(#gold)"/>
+  <path d="M188 25v-9M188 80v-9M165 48h-9M220 48h-9" stroke="#c69a50" stroke-width="3" stroke-linecap="round"/>
+</g>
+<g fill="#102b43">
+  <text x="850" y="112" text-anchor="end" direction="rtl" font-family="Tahoma,Arial,sans-serif" font-size="88" font-weight="800" letter-spacing="0">أثــر</text>
+  <path d="M565 137h280" stroke="#c69a50" stroke-width="3" stroke-linecap="round"/>
+  <text x="850" y="190" text-anchor="end" font-family="Arial,sans-serif" font-size="36" font-weight="700" letter-spacing="12" fill="#197f83">STUDIO</text>
+</g>
+</svg>

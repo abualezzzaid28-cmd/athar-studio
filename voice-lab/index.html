@@ -32,6 +32,8 @@
     <textarea id="text">ليست كل كلمة نقولها تمر بلا أثر؛ فالكلمة الطيبة ترفع إنساناً، والموقف الصادق يترك ذكرى. فلنحسن اختيار كلماتنا، ولنصنع أثراً يبقى.</textarea>
     <button id="make" type="button" onclick="document.getElementById('status').textContent='تم الضغط على الزر؛ جارٍ بدء تشغيل المحرك...'">تحميل المحرك وتجربة الصوت</button>
     <button id="stop" class="secondary" type="button" disabled>إيقاف الصوت</button>
+    <button id="diagnose" class="secondary" type="button">فحص توافق الجهاز</button>
+    <div id="diagnostic" role="status" aria-live="polite" hidden></div>
     <progress id="progress" value="0" max="1" hidden></progress>
     <div id="status" role="status" aria-live="polite">اضغط زر التجربة. سيُحمّل النموذج عند أول استخدام فقط.</div>
     <audio id="player" controls hidden></audio>
@@ -46,6 +48,8 @@
   const progress = document.getElementById("progress");
   const player = document.getElementById("player");
   const download = document.getElementById("download");
+  const diagnose = document.getElementById("diagnose");
+  const diagnostic = document.getElementById("diagnostic");
   let engine = null;
   let audioUrl = null;
 
@@ -103,6 +107,44 @@
       make.disabled = false;
       progress.hidden = true;
     }
+  });
+
+  diagnose.addEventListener("click", async () => {
+    diagnose.disabled = true;
+    diagnostic.hidden = false;
+    diagnostic.style.cssText = "white-space:pre-wrap;background:#f3f5f1;border-radius:10px;padding:12px;margin-top:12px;overflow-wrap:anywhere";
+    diagnostic.textContent = "جارٍ فحص توافق المتصفح والوصول إلى ملفات WASM...";
+    const lines = [];
+    try {
+      lines.push("المتصفح: " + (navigator.userAgent || "غير معروف"));
+      lines.push("WebAssembly: " + (typeof WebAssembly !== "undefined" ? "متوفر" : "غير متوفر"));
+      if (typeof WebAssembly !== "undefined") {
+        const simdModule = new Uint8Array([
+          0,97,115,109,1,0,0,0,
+          1,5,1,96,0,0,
+          3,2,1,0,
+          10,23,1,21,0,253,12,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          26,11
+        ]);
+        lines.push("دعم WebAssembly SIMD: " + (WebAssembly.validate(simdModule) ? "مدعوم" : "غير مدعوم"));
+      }
+      for (const file of ["ort-wasm-simd-threaded.jsep.wasm","ort-wasm-simd-threaded.wasm"]) {
+        try {
+          const response = await fetch("./vendor/ort/" + file, {method:"HEAD", cache:"no-store"});
+          const type = response.headers.get("content-type") || "غير محدد";
+          const size = response.headers.get("content-length") || "غير محدد";
+          lines.push(file + ": HTTP " + response.status + " | النوع: " + type + " | الحجم: " + size);
+        } catch (e) {
+          lines.push(file + ": فشل الوصول — " + (e.message || e));
+        }
+      }
+      lines.push("انتهى الفحص. أرسل لي هذه النتيجة كما تظهر.");
+    } catch (e) {
+      lines.push("تعذر إكمال الفحص: " + (e.message || e));
+    }
+    diagnostic.textContent = lines.join("\n");
+    diagnose.disabled = false;
   });
 
   stop.addEventListener("click", () => {

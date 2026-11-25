@@ -30,7 +30,7 @@
     <div class="notice">تنبيه: هذا النموذج للفصحى فقط، ولا يولّد اللهجة العراقية. تحميل النموذج لأول مرة يقارب 16 ميغابايت بنسخة FP16، ويحتاج إلى اتصال بالإنترنت. لا توجد رسوم أو بطاقة مطلوبة من هذا النموذج.</div>
     <label for="text"><strong>النص المراد تحويله إلى صوت</strong></label>
     <textarea id="text">ليست كل كلمة نقولها تمر بلا أثر؛ فالكلمة الطيبة ترفع إنساناً، والموقف الصادق يترك ذكرى. فلنحسن اختيار كلماتنا، ولنصنع أثراً يبقى.</textarea>
-    <button id="make" type="button">تحميل المحرك وتجربة الصوت</button>
+    <button id="make" type="button" onclick="document.getElementById('status').textContent='تم الضغط على الزر؛ جارٍ بدء تشغيل المحرك...'">تحميل المحرك وتجربة الصوت</button>
     <button id="stop" class="secondary" type="button" disabled>إيقاف الصوت</button>
     <progress id="progress" value="0" max="1" hidden></progress>
     <div id="status" role="status" aria-live="polite">اضغط زر التجربة. سيُحمّل النموذج عند أول استخدام فقط.</div>
@@ -39,7 +39,7 @@
     <small>المحرك: Nabra-7M-Distill-ONNX — ترخيص Apache 2.0. الصوت تجريبي ولا يعني اعتماده في التطبيق الأساسي.</small>
   </section>
 </main>
-<script type="module">
+<script>
   const make = document.getElementById("make");
   const stop = document.getElementById("stop");
   const status = document.getElementById("status");

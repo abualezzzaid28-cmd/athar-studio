@@ -75,7 +75,7 @@
 
     .topbar-actions { display: flex; align-items: center; gap: 12px; }
     .save-state { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 12px; }
-    .save-dot { width: 7px; height: 7px; border-radius: 50%; background: #64a780; }
+    .save-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
     .avatar {
       display: grid;
       width: 35px;
@@ -334,7 +334,7 @@
         </span>
       </a>
       <div class="topbar-actions">
-        <span class="save-state"><span class="save-dot"></span>تم الحفظ تلقائياً</span>
+        <span class="save-state"><span class="save-dot"></span>مسودة غير محفوظة</span>
         <span class="avatar" aria-label="حساب المستخدم">م</span>
       </div>
     </header>
@@ -376,7 +376,7 @@
                 </div>
                 <div class="upload-copy">
                   <strong id="upload-title">اسحب الصورة إلى هنا</strong>
-                  <p id="upload-hint">PNG أو JPG · صورة واضحة بإضاءة جيدة</p>
+                  <p id="upload-hint">PNG أو JPG أو WEBP · صورة واضحة بإضاءة جيدة</p>
                 </div>
                 <button type="button" class="upload-button" id="choose-image">اختيار صورة</button>
                 <input class="file-input" id="image-input" type="file" accept="image/png,image/jpeg,image/webp">
@@ -390,17 +390,17 @@
                 <span class="section-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M8 7v10M4 10v4m12-7v10m4-7v4"/></svg>
                 </span>
-                <div><h2 id="audio-heading">إعداد الصوت</h2><p class="card-subtitle">اختر نبرة الصوت وسرعة الإلقاء</p></div>
+                <div><h2 id="audio-heading">إعداد الصوت</h2><p class="card-subtitle">اضبط طبقة الصوت والسرعة للاختبار على جهازك</p></div>
               </div>
               <span class="optional">صوت تجريبي</span>
             </div>
             <div class="card-body">
               <div class="audio-layout">
                 <div class="field">
-                  <label for="voice-select">الصوت</label>
+                  <label for="voice-select">طبقة الصوت</label>
                   <select id="voice-select">
-                    <option value="female">صوت نسائي — هادئ</option>
-                    <option value="male">صوت رجالي — واضح</option>
+                    <option value="female">نبرة أعلى — تجريبية</option>
+                    <option value="male">نبرة أخفض — تجريبية</option>
                   </select>
                 </div>
                 <div class="field">
@@ -422,7 +422,7 @@
                   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.8c0-.8.9-1.3 1.6-.9l9.1 5.2a1 1 0 0 1 0 1.8l-9.1 5.2a1.05 1.05 0 0 1-1.6-.9z"/></svg>
                   استمع للصوت
                 </button>
-                <span class="audio-note">يُستخدم الصوت المتاح على جهازك</span>
+                <span class="audio-note">اختبار محلي؛ لا يتم استنساخ صوت أو إنشاء ملف صوتي.</span>
               </div>
             </div>
           </section>
@@ -457,11 +457,11 @@
               <span class="section-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="m10 9 5 3-5 3z"/></svg>
               </span>
-              <div><h2 id="preview-heading">معاينة الفيديو</h2><p class="card-subtitle">شكل تقريبي قبل الاعتماد</p></div>
+              <div><h2 id="preview-heading">معاينة الفيديو</h2><p class="card-subtitle">تصميم تقريبي فقط؛ لا يُنتج فيديو</p></div>
             </div>
             <span class="preview-badge">معاينة أولية</span>
           </div>
-          <div class="video-frame" id="video-frame" role="img" aria-label="معاينة تصميم الفيديو التوعوي">
+          <div class="video-frame" id="video-frame" role="img" aria-label="تصميم تقريبي ثابت للفيديو التوعوي">
             <div class="video-content">
               <div class="preview-mark" aria-hidden="true">أ</div>
               <p class="preview-kicker">رسالة توعوية</p>
@@ -470,7 +470,7 @@
               <p class="preview-subtitle">كل أثر يبدأ بخطوة</p>
             </div>
             <div class="preview-footer"><span>أثر STUDIO</span><span>١ / ١</span></div>
-            <button type="button" class="preview-play" id="preview-play" aria-label="تشغيل معاينة الفيديو">
+            <button type="button" class="preview-play" id="preview-play" aria-label="تشغيل محاكاة المعاينة">
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.8c0-.8.9-1.3 1.6-.9l9.1 5.2a1 1 0 0 1 0 1.8l-9.1 5.2a1.05 1.05 0 0 1-1.6-.9z"/></svg>
             </button>
           </div>
@@ -525,6 +525,8 @@
     let toastTimer;
     let previewTimer;
     let previewSeconds = 0;
+    let contentReviewed = false;
+    let contentApproved = false;
 
     const arabicDigits = (value) => String(value).replace(/\d/g, (digit) => "٠١٢٣٤٥٦٧٨٩"[Number(digit)]);
 
@@ -541,6 +543,10 @@
         showToast("يرجى اختيار صورة بصيغة PNG أو JPG أو WEBP.");
         return;
       }
+      if (file.size > 10 * 1024 * 1024) {
+        showToast("حجم الصورة أكبر من ١٠ ميغابايت. اختر صورة أصغر.");
+        return;
+      }
       const reader = new FileReader();
       reader.addEventListener("load", () => {
         if (typeof reader.result !== "string") {
@@ -554,6 +560,7 @@
         imagePreview.append(image);
         uploadTitle.textContent = file.name;
         uploadHint.textContent = "تم اختيار الصورة بنجاح";
+        markContentChanged();
         updateProgress();
       });
       reader.addEventListener("error", () => showToast("تعذر قراءة الصورة. حاول مرة أخرى."));
@@ -572,17 +579,29 @@
     function updateProgress() {
       const hasText = scriptText.value.trim().length > 0;
       const hasImage = imagePreview.querySelector("img") !== null;
-      const steps = document.querySelectorAll(".step");
-      steps[0].classList.toggle("done", hasText || hasImage);
-      steps[0].classList.toggle("active", !hasText && !hasImage);
-      steps[1].classList.toggle("active", hasText || hasImage);
-      approveButton.disabled = !hasText;
+      const hasContent = hasText || hasImage;
+      const steps = [...document.querySelectorAll(".step")];
+      steps.forEach((step, index) => {
+        step.classList.toggle("done", index === 0 ? hasContent : index === 1 ? contentReviewed : contentApproved);
+        step.classList.toggle("active", index === 0 ? !hasContent : index === 1 ? hasContent && !contentReviewed : contentReviewed && !contentApproved);
+      });
+      approveButton.disabled = !hasText || !contentReviewed || contentApproved;
+    }
+
+    function markContentChanged() {
+      if (contentReviewed) {
+        contentReviewed = false;
+        contentApproved = false;
+        reviewStatus.textContent = "تغيّر المحتوى؛ أعد مراجعته قبل الاعتماد.";
+        reviewStatus.classList.add("visible");
+      }
+      updateProgress();
     }
 
     function setPreviewPlaying(playing) {
       const button = document.getElementById("preview-play");
       button.classList.toggle("is-playing", playing);
-      button.setAttribute("aria-label", playing ? "إيقاف معاينة الفيديو" : "تشغيل معاينة الفيديو");
+      button.setAttribute("aria-label", playing ? "إيقاف محاكاة المعاينة" : "تشغيل محاكاة المعاينة");
       button.innerHTML = playing
         ? '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg>'
         : '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.8c0-.8.9-1.3 1.6-.9l9.1 5.2a1 1 0 0 1 0 1.8l-9.1 5.2a1.05 1.05 0 0 1-1.6-.9z"/></svg>';
@@ -599,7 +618,10 @@
       uploadZone.classList.remove("dragging");
     }));
     uploadZone.addEventListener("drop", (event) => loadImage(event.dataTransfer.files[0]));
-    scriptText.addEventListener("input", updateText);
+    scriptText.addEventListener("input", () => {
+      markContentChanged();
+      updateText();
+    });
 
     document.getElementById("insert-suggestion").addEventListener("click", () => {
       scriptText.value = "ابدأ بخطوة صغيرة اليوم، وامنح نفسك فرصة لصحة أفضل غداً. التغيير الإيجابي لا يحتاج إلى الكمال، بل إلى الاستمرار.";
@@ -612,7 +634,10 @@
     speedRange.addEventListener("input", () => {
       const speed = Number(speedRange.value);
       speedValue.textContent = speed < 0.9 ? "بطيئة" : speed > 1.1 ? "سريعة" : "متوسطة";
+      markContentChanged();
     });
+    document.getElementById("voice-select").addEventListener("change", markContentChanged);
+    document.getElementById("tone-select").addEventListener("change", markContentChanged);
 
     document.getElementById("test-voice").addEventListener("click", () => {
       if (!("speechSynthesis" in window)) {
@@ -625,7 +650,9 @@
       if (arabicVoice) utterance.voice = arabicVoice;
       utterance.lang = arabicVoice ? arabicVoice.lang : "ar";
       utterance.rate = Number(speedRange.value);
-      utterance.pitch = document.getElementById("voice-select").value === "female" ? 1.08 : 0.88;
+      const basePitch = document.getElementById("voice-select").value === "female" ? 1.08 : 0.88;
+      const tonePitch = { calm: -0.08, warm: 0.06, formal: 0 }[document.getElementById("tone-select").value];
+      utterance.pitch = Math.min(2, Math.max(0.5, basePitch + tonePitch));
       window.speechSynthesis.cancel();
       window.speechSynthesis.speak(utterance);
     });
@@ -638,6 +665,7 @@
         return;
       }
       if (previewSeconds >= 15) previewSeconds = 0;
+      showToast("محاكاة شكلية فقط؛ لا يوجد فيديو أو صوت مولّد.");
       setPreviewPlaying(true);
       previewTimer = window.setInterval(() => {
         previewSeconds += 1;
@@ -652,29 +680,37 @@
     });
 
     reviewButton.addEventListener("click", () => {
+      if (contentApproved) {
+        reviewStatus.textContent = "تم اعتماد هذا المحتوى بالفعل. عدّله لإعادة مراجعته.";
+        reviewStatus.classList.add("visible");
+        return;
+      }
       const hasText = scriptText.value.trim().length > 0;
       reviewStatus.textContent = hasText
         ? "تمت مراجعة النص والمعاينة. يمكنك اعتماد المحتوى للخطوة التالية."
         : "أضف النص التوعوي أولاً لتتمكن من مراجعة المحتوى.";
       reviewStatus.classList.add("visible");
       if (hasText) {
-        approveButton.disabled = false;
-        document.querySelector('[data-step="3"]').classList.add("active");
+        contentReviewed = true;
+        updateProgress();
       }
     });
 
     approveButton.addEventListener("click", () => {
       if (!scriptText.value.trim()) return;
-      reviewStatus.textContent = "تم اعتماد المحتوى للمراجعة بنجاح. يمكنك متابعة تجهيز الفيديو.";
+      if (!contentReviewed) {
+        reviewStatus.textContent = "راجع المحتوى أولاً قبل اعتماده.";
+        reviewStatus.classList.add("visible");
+        return;
+      }
+      contentApproved = true;
+      reviewStatus.textContent = "تم اعتماد المحتوى لهذه الجلسة فقط؛ لم يتم إنشاء فيديو أو نشره.";
       reviewStatus.classList.add("visible");
-      document.querySelectorAll(".step").forEach((step) => {
-        step.classList.remove("active");
-        step.classList.add("done");
-      });
-      showToast("تم اعتماد المحتوى للمراجعة.");
+      updateProgress();
+      showToast("تم تسجيل الاعتماد لهذه الجلسة.");
     });
 
     updateText();
   </script>
 </body>
-</html>على 
+</html>

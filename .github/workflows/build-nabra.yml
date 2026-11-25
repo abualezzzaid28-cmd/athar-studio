@@ -19,8 +19,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: /tmp/nabra-tts/package-lock.json
 
       - name: Download Nabra source
         run: git clone --depth 1 https://github.com/Oddadmix/nabra-tts.git /tmp/nabra-tts

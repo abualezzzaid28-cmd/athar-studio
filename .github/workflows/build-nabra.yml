@@ -27,7 +27,16 @@ jobs:
         working-directory: /tmp/nabra-tts
         run: |
           npm ci
-          sed -i "s/external: \['react', 'onnxruntime-web'\]/external: ['react']/" tsup.config.ts
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("tsup.config.ts")
+          s = p.read_text()
+          old = "external: ['react', 'onnxruntime-web']"
+          new = "external: ['react']"
+          if old not in s:
+              raise SystemExit("Could not find expected external dependency declaration")
+          p.write_text(s.replace(old, new, 1))
+          PY
           npm run build
 
       - name: Copy built engine and local WASM runtime

@@ -95,6 +95,8 @@
     .welcome-copy { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
     .project-chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: #59645d; font-size: 11px; white-space: nowrap; }
     .project-chip span { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
+    .project-name-input { width: 112px; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--ink); font: inherit; font-size: 11px; }
+    .project-name-input:focus { outline: 2px solid rgb(36 93 73 / 20%); outline-offset: 3px; border-radius: 4px; }
 
     .workflow {
       display: flex;
@@ -346,7 +348,7 @@
           <h1 id="page-title">اصنع محتوى يترك أثراً</h1>
           <p class="welcome-copy">جهّز فيديوك التوعوي بخطوات بسيطة، وراجعه قبل اعتماده.</p>
         </div>
-        <div class="project-chip"><span></span>مشروع جديد <b>·</b> بدون عنوان</div>
+        <div class="project-chip"><span></span><label class="sr-only" for="project-name">اسم المشروع</label><input class="project-name-input" id="project-name" type="text" maxlength="60" placeholder="اسم المشروع" value="مشروعي الجديد"></div>
       </section>
 
       <nav class="workflow" aria-label="خطوات إنشاء الفيديو">
@@ -527,6 +529,50 @@
     let previewSeconds = 0;
     let contentReviewed = false;
     let contentApproved = false;
+    const DRAFT_KEY = "athar-studio-draft-v1";
+    let saveTimer;
+    const saveState = document.querySelector(".save-state");
+    const projectName = document.getElementById("project-name");
+
+    function saveDraft() {
+      window.clearTimeout(saveTimer);
+      saveState.innerHTML = '<span class="save-dot" style="background:#2f8b5b"></span>جارٍ الحفظ محلياً…';
+      saveTimer = window.setTimeout(() => {
+        const draft = {
+          projectName: projectName.value,
+          script: scriptText.value,
+          voice: document.getElementById("voice-select").value,
+          tone: document.getElementById("tone-select").value,
+          speed: speedRange.value,
+          savedAt: new Date().toISOString()
+        };
+        try {
+          localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+          saveState.innerHTML = '<span class="save-dot" style="background:#2f8b5b"></span>محفوظ على هذا الجهاز';
+        } catch (error) {
+          saveState.innerHTML = '<span class="save-dot"></span>تعذر الحفظ المحلي';
+        }
+      }, 350);
+    }
+
+    function restoreDraft() {
+      try {
+        const raw = localStorage.getItem(DRAFT_KEY);
+        if (!raw) return;
+        const draft = JSON.parse(raw);
+        if (!draft || typeof draft !== "object") return;
+        if (typeof draft.projectName === "string") projectName.value = draft.projectName;
+        if (typeof draft.script === "string") scriptText.value = draft.script.slice(0, 500);
+        if (["female", "male"].includes(draft.voice)) document.getElementById("voice-select").value = draft.voice;
+        if (["calm", "warm", "formal"].includes(draft.tone)) document.getElementById("tone-select").value = draft.tone;
+        if (["0.7", "0.8", "0.9", "1", "1.1", "1.2", "1.3"].includes(String(draft.speed))) speedRange.value = String(draft.speed);
+        speedValue.textContent = Number(speedRange.value) < 0.9 ? "بطيئة" : Number(speedRange.value) > 1.1 ? "سريعة" : "متوسطة";
+        updateText();
+        saveState.innerHTML = '<span class="save-dot" style="background:#2f8b5b"></span>تم استرجاع المسودة المحلية';
+      } catch (error) {
+        saveState.innerHTML = '<span class="save-dot"></span>تعذر استرجاع المسودة';
+      }
+    }
 
     const arabicDigits = (value) => String(value).replace(/\d/g, (digit) => "٠١٢٣٤٥٦٧٨٩"[Number(digit)]);
 
@@ -636,8 +682,11 @@
       speedValue.textContent = speed < 0.9 ? "بطيئة" : speed > 1.1 ? "سريعة" : "متوسطة";
       markContentChanged();
     });
-    document.getElementById("voice-select").addEventListener("change", markContentChanged);
-    document.getElementById("tone-select").addEventListener("change", markContentChanged);
+    document.getElementById("voice-select").addEventListener("change", () => { markContentChanged(); saveDraft(); });
+    document.getElementById("tone-select").addEventListener("change", () => { markContentChanged(); saveDraft(); });
+    projectName.addEventListener("input", saveDraft);
+    speedRange.addEventListener("change", saveDraft);
+    scriptText.addEventListener("input", saveDraft);
 
     document.getElementById("test-voice").addEventListener("click", () => {
       if (!("speechSynthesis" in window)) {
@@ -710,7 +759,9 @@
       showToast("تم تسجيل الاعتماد لهذه الجلسة.");
     });
 
+    restoreDraft();
     updateText();
+    saveDraft();
   </script>
 </body>
 </html>

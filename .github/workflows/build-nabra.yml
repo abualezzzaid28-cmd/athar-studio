@@ -1,0 +1,53 @@
+name: Build local Nabra voice engine
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Athar Studio
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: /tmp/nabra-tts/package-lock.json
+
+      - name: Download Nabra source
+        run: git clone --depth 1 https://github.com/Oddadmix/nabra-tts.git /tmp/nabra-tts
+
+      - name: Build browser bundle with ONNX Runtime included
+        working-directory: /tmp/nabra-tts
+        run: |
+          npm ci
+          sed -i "s/external: \['react', 'onnxruntime-web'\]/external: ['react']/" tsup.config.ts
+          npm run build
+
+      - name: Copy built engine and local WASM runtime
+        run: |
+          mkdir -p voice-lab/vendor/nabra voice-lab/vendor/ort
+          cp -R /tmp/nabra-tts/dist/. voice-lab/vendor/nabra/
+          cp /tmp/nabra-tts/node_modules/onnxruntime-web/dist/*.wasm voice-lab/vendor/ort/
+          cp /tmp/nabra-tts/LICENSE voice-lab/vendor/nabra/LICENSE
+          cp /tmp/nabra-tts/THIRD_PARTY_NOTICES.md voice-lab/vendor/nabra/THIRD_PARTY_NOTICES.md
+
+      - name: Commit generated local engine
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add voice-lab/vendor
+          if git diff --cached --quiet; then
+            echo "No generated engine changes."
+          else
+            git commit -m "Build local Nabra browser engine"
+            git push
+          fi

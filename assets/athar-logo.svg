@@ -1,22 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 240" role="img" aria-labelledby="title desc">
-<title id="title">أثر STUDIO</title>
-<desc id="desc">هوية أثر ستوديو: رمز موجة أثر ونقطة ضوء بخطوط نظيفة باللون الكحلي والذهبي والتركوازي.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1000" role="img" aria-labelledby="title desc">
+<title id="title">استوديو أثر — ATHAR STUDIO</title>
+<desc id="desc">شعار استوديو أثر: حروف عربية متدفقة تلتقي مع ورقة خضراء ورمز تشغيل وشريط سينمائي، مع عبارة نصنع أثراً يبقى.</desc>
 <defs>
-  <linearGradient id="navy" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#173b57"/><stop offset="1" stop-color="#091d32"/></linearGradient>
-  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f1d69a"/><stop offset="1" stop-color="#bd8b3c"/></linearGradient>
-  <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#43b8b1"/><stop offset="1" stop-color="#167d83"/></linearGradient>
+  <linearGradient id="green" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#245d49"/><stop offset="1" stop-color="#194b39"/></linearGradient>
+  <linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d7ed9b"/><stop offset=".55" stop-color="#65a94e"/><stop offset="1" stop-color="#245d49"/></linearGradient>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#b88e4e"/><stop offset=".5" stop-color="#d8b66e"/><stop offset="1" stop-color="#c9a76a"/></linearGradient>
 </defs>
-<g transform="translate(22 10)">
-  <circle cx="110" cy="110" r="98" fill="#f7f8f6" stroke="#e5e9e7" stroke-width="2"/>
-  <path d="M47 145c22-49 57-76 102-82 17-2 33 0 48 6" fill="none" stroke="url(#navy)" stroke-width="17" stroke-linecap="round"/>
-  <path d="M45 169c33-28 68-41 104-39 22 1 42 8 61 21" fill="none" stroke="url(#teal)" stroke-width="12" stroke-linecap="round"/>
-  <path d="M77 108c18-18 39-28 63-29 16 0 30 4 44 13" fill="none" stroke="url(#gold)" stroke-width="8" stroke-linecap="round"/>
-  <circle cx="188" cy="48" r="10" fill="url(#gold)"/>
-  <path d="M188 25v-9M188 80v-9M165 48h-9M220 48h-9" stroke="#c69a50" stroke-width="3" stroke-linecap="round"/>
+<rect width="900" height="1000" rx="34" fill="#f5f6f2"/>
+<!-- One flowing media ribbon that becomes the Arabic-inspired emblem -->
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M180 440 C225 335 315 286 405 320 C468 344 494 410 565 412 C637 414 684 354 700 275" stroke="url(#green)" stroke-width="66"/>
+  <path d="M172 478 C265 414 339 412 414 451 C500 496 590 482 654 423" stroke="url(#green)" stroke-width="48"/>
+  <path d="M215 510 C298 474 362 492 420 532 C486 578 578 559 648 510" stroke="url(#gold)" stroke-width="18"/>
+  <path d="M565 414 C536 320 554 213 653 125 C687 95 727 75 766 65 C754 147 723 214 669 262 C629 298 588 328 565 414Z" fill="url(#leaf)" stroke="none"/>
+  <path d="M577 385 C622 274 681 190 752 91" stroke="#d7ed9b" stroke-width="8" opacity=".9"/>
 </g>
-<g fill="#102b43">
-  <text x="850" y="112" text-anchor="end" direction="rtl" font-family="Tahoma,Arial,sans-serif" font-size="88" font-weight="800" letter-spacing="0">أثــر</text>
-  <path d="M565 137h280" stroke="#c69a50" stroke-width="3" stroke-linecap="round"/>
-  <text x="850" y="190" text-anchor="end" font-family="Arial,sans-serif" font-size="36" font-weight="700" letter-spacing="12" fill="#197f83">STUDIO</text>
+<!-- Film perforations integrated into the lower ribbon -->
+<g fill="#f5f6f2">
+  <rect x="214" y="405" width="25" height="17" rx="3" transform="rotate(-24 214 405)"/>
+  <rect x="260" y="381" width="25" height="17" rx="3" transform="rotate(-15 260 381)"/>
+  <rect x="309" y="372" width="25" height="17" rx="3" transform="rotate(-5 309 372)"/>
+  <rect x="358" y="382" width="25" height="17" rx="3" transform="rotate(9 358 382)"/>
 </g>
+<!-- Play mark in the open negative-space center -->
+<path d="M461 377 Q447 369 447 387 V438 Q447 456 463 447 L505 422 Q520 413 505 403Z" fill="url(#gold)"/>
+<!-- Arabic wordmark and studio naming -->
+<text x="450" y="680" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Tahoma, Arial, sans-serif" font-size="112" font-weight="800" fill="#194b39">أثر</text>
+<text x="450" y="760" text-anchor="middle" font-family="Arial, sans-serif" font-size="43" font-weight="700" letter-spacing="13" fill="#194b39">ATHAR STUDIO</text>
+<path d="M155 744 H275 M625 744 H745" stroke="url(#gold)" stroke-width="5" stroke-linecap="round"/>
+<text x="450" y="840" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Tahoma, Arial, sans-serif" font-size="48" fill="#245d49">نصنع أثراً يبقى</text>
 </svg>

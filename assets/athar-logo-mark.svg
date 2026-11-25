@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" role="img" aria-labelledby="title desc">
+<title id="title">رمز استوديو أثر</title><desc id="desc">رمز أخضر متدفق يجمع ورقة نامية وشريطاً سينمائياً ورمز تشغيل.</desc>
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#245d49"/><stop offset="1" stop-color="#194b39"/></linearGradient>
+<linearGradient id="l" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d7ed9b"/><stop offset=".55" stop-color="#65a94e"/><stop offset="1" stop-color="#245d49"/></linearGradient>
+<linearGradient id="a" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#b88e4e"/><stop offset=".5" stop-color="#d8b66e"/><stop offset="1" stop-color="#c9a76a"/></linearGradient>
+</defs>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M105 405 C170 255 280 215 390 260 C475 295 500 385 585 385 C675 385 730 300 748 185" stroke="url(#g)" stroke-width="76"/>
+<path d="M110 455 C235 360 330 355 420 410 C520 470 630 445 710 370" stroke="url(#g)" stroke-width="54"/>
+<path d="M190 495 C300 445 375 470 440 515 C515 565 625 535 700 475" stroke="url(#a)" stroke-width="19"/>
+<path d="M585 385 C548 275 570 160 680 70 C718 39 760 18 805 10 C790 105 755 178 695 230 C650 270 610 310 585 385Z" fill="url(#l)" stroke="none"/>
+<path d="M598 350 C650 225 715 135 790 38" stroke="#d7ed9b" stroke-width="9"/>
+</g>
+<g fill="#f5f6f2">
+<rect x="145" y="365" width="31" height="21" rx="4" transform="rotate(-24 145 365)"/>
+<rect x="205" y="335" width="31" height="21" rx="4" transform="rotate(-15 205 335)"/>
+<rect x="270" y="325" width="31" height="21" rx="4" transform="rotate(-5 270 325)"/>
+<rect x="335" y="340" width="31" height="21" rx="4" transform="rotate(9 335 340)"/>
+</g>
+<path d="M465 335 Q447 325 447 347 V415 Q447 435 466 424 L520 393 Q538 382 520 370Z" fill="url(#a)"/>
+</svg>

@@ -336,7 +336,7 @@
   <div class="app-shell">
     <header class="topbar">
       <a class="brand" href="#" aria-label="أثر STUDIO — الصفحة الرئيسية" style="color:inherit;text-decoration:none">
-        <span class="brand-mark" aria-hidden="true">أ</span>
+        <img src="assets/athar-logo.svg" alt="شعار أثر STUDIO" style="width:54px;height:54px;object-fit:contain">
         <span>
           <span class="brand-name">أثر STUDIO</span>
           <span class="brand-caption">مساحة صناعة الأثر</span>
@@ -406,10 +406,17 @@
             <div class="card-body">
               <div class="audio-layout">
                 <div class="field">
-                  <label for="voice-select">طبقة الصوت</label>
+                  <label for="dialect-select">اللهجة</label>
+                  <select id="dialect-select">
+                    <option value="iraqi">اللهجة العراقية</option>
+                    <option value="fusha">العربية الفصحى</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="voice-select">طابع الصوت</label>
                   <select id="voice-select">
-                    <option value="female">نبرة أعلى — تجريبية</option>
-                    <option value="male">نبرة أخفض — تجريبية</option>
+                    <option value="female">صوت نسائي — إذا توفر</option>
+                    <option value="male">صوت رجالي — إذا توفر</option>
                   </select>
                 </div>
                 <div class="field">
@@ -431,7 +438,7 @@
                   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.8c0-.8.9-1.3 1.6-.9l9.1 5.2a1 1 0 0 1 0 1.8l-9.1 5.2a1.05 1.05 0 0 1-1.6-.9z"/></svg>
                   استمع للصوت
                 </button>
-                <span class="audio-note">اختبار محلي؛ لا يتم استنساخ صوت أو إنشاء ملف صوتي.</span>
+                <span class="audio-note">تجربة من أصوات الجهاز؛ اللهجة والجنس غير مضمونين إذا لم يوفرهما الجهاز.</span>
               </div>
             </div>
           </section>
@@ -572,6 +579,7 @@
           projectName: projectName.value,
           script: scriptText.value,
           voice: document.getElementById("voice-select").value,
+          dialect: document.getElementById("dialect-select").value,
           tone: document.getElementById("tone-select").value,
           speed: speedRange.value,
           savedAt: new Date().toISOString()
@@ -594,6 +602,7 @@
         if (typeof draft.projectName === "string") projectName.value = draft.projectName;
         if (typeof draft.script === "string") scriptText.value = draft.script;
         if (["female", "male"].includes(draft.voice)) document.getElementById("voice-select").value = draft.voice;
+        if (["iraqi", "fusha"].includes(draft.dialect)) document.getElementById("dialect-select").value = draft.dialect;
         if (["calm", "warm", "formal"].includes(draft.tone)) document.getElementById("tone-select").value = draft.tone;
         if (["0.7", "0.8", "0.9", "1", "1.1", "1.2", "1.3"].includes(String(draft.speed))) speedRange.value = String(draft.speed);
         speedValue.textContent = Number(speedRange.value) < 0.9 ? "بطيئة" : Number(speedRange.value) > 1.1 ? "سريعة" : "متوسطة";
@@ -713,6 +722,7 @@
       markContentChanged();
     });
     document.getElementById("voice-select").addEventListener("change", () => { markContentChanged(); saveDraft(); });
+    document.getElementById("dialect-select").addEventListener("change", () => { markContentChanged(); saveDraft(); });
     document.getElementById("tone-select").addEventListener("change", () => { markContentChanged(); saveDraft(); });
     projectName.addEventListener("input", saveDraft);
     speedRange.addEventListener("change", saveDraft);
@@ -723,11 +733,19 @@
         showToast("ميزة الاستماع غير متاحة في هذا المتصفح.");
         return;
       }
-      const utterance = new SpeechSynthesisUtterance(scriptText.value.trim() || "مرحباً بك في أثر ستوديو. كل أثر يبدأ بخطوة.");
+      const dialect = document.getElementById("dialect-select").value;
+      const sampleText = dialect === "iraqi"
+        ? "هلا بيكم في أثر ستوديو. كل أثر يبدأ بخطوة، وخلّونا نصنع فرق بحياتنا."
+        : "مرحباً بكم في استوديو أثر. كل أثر يبدأ بخطوة، ولنجعل رسالتنا سبباً في التغيير الإيجابي.";
+      const utterance = new SpeechSynthesisUtterance(scriptText.value.trim() || sampleText);
       const voices = window.speechSynthesis.getVoices();
-      const arabicVoice = voices.find((voice) => voice.lang.toLowerCase().startsWith("ar"));
-      if (arabicVoice) utterance.voice = arabicVoice;
-      utterance.lang = arabicVoice ? arabicVoice.lang : "ar";
+      const wantedLang = dialect === "iraqi" ? "ar-IQ" : "ar";
+      const arabicVoices = voices.filter((voice) => voice.lang && voice.lang.toLowerCase().startsWith("ar"));
+      const selectedVoice = arabicVoices.find((voice) => voice.lang.toLowerCase() === wantedLang.toLowerCase())
+        || arabicVoices.find((voice) => dialect === "fusha" && /standard|modern|msa|arabic/i.test(voice.name))
+        || arabicVoices[0];
+      if (selectedVoice) utterance.voice = selectedVoice;
+      utterance.lang = selectedVoice ? selectedVoice.lang : wantedLang;
       utterance.rate = Number(speedRange.value);
       const basePitch = document.getElementById("voice-select").value === "female" ? 1.08 : 0.88;
       const tonePitch = { calm: -0.08, warm: 0.06, formal: 0 }[document.getElementById("tone-select").value];
